@@ -25,15 +25,19 @@ def readcustomerfromdatabase():
     return zh_rows,en_rows
 
 def readdpelfromdatabase():
-    rows=[]
+    zh_rows=[]
+    en_rows=[]
     conn=pymssql.connect(host="192.1.8.202",user="sa",password="p@ssw0rd",database="MDM_Customer",as_dict=True,charset="cp936")
     cur=conn.cursor()
     cur.execute("SELECT * FROM DPELCustomers")
     for row in cur:
-        result={"companyName":row["CustomerName"] and row["CustomerName"].strip().replace("\"",'') or "","address":row["Address"] and row["Address"].strip().replace("\"",""),"language":row["Language"]}        
-        rows.append(result)
+        result={"companyName":row["CustomerName"] and row["CustomerName"].strip().replace("\"",'') or "","address":row["Address"] and row["Address"].strip().replace("\"",""),"language":row["Language"]}
+        if row["Language"]==1:
+            zh_rows.append(result)
+        else:
+            en_rows.append(result)        
     conn.close()
-    return rows
+    return zh_rows,en_rows
 
 if __name__=="__main__":
     en,zh=readcustomerfromdatabase()
