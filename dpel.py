@@ -6,7 +6,8 @@
 import pymssql
 
 def readcustomerfromdatabase():
-    rows=[]
+    zh_rows=[]
+    en_rows=[]
     conn=pymssql.connect(host="192.1.8.202",user="sa",password="p@ssw0rd",database="BPMForNC2",as_dict=True,charset="cp936")
     cur=conn.cursor()
     cur.execute("SELECT * FROM MDM_Customer_Sap")
@@ -16,9 +17,12 @@ def readcustomerfromdatabase():
             "companyNameEn":row["CompanyNameEn"],
             "address":row["RegisterAddress"]
         }        
-        rows.append(result)
+        if row["CurrencyType"] and row["CurrencyType"]=="RMB":
+            zh_rows.append(result)
+        else:
+            en_rows.append(result)
     conn.close()
-    return rows
+    return zh_rows,en_rows
 
 def readdpelfromdatabase():
     rows=[]
@@ -32,5 +36,6 @@ def readdpelfromdatabase():
     return rows
 
 if __name__=="__main__":
-    print readcustomerfromdatabase()
-    print readdpelfromdatabase()
+    en,zh=readcustomerfromdatabase()
+    print en
+    #print readdpelfromdatabase()
