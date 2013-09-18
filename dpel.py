@@ -52,8 +52,8 @@ def readcustomerfromdatabase():
     en_rows=[]
     conn=pymssql.connect(host="192.1.8.202",user="sa",password="p@ssw0rd",database="MDM_Customer",as_dict=True,charset="UTF8")
     cur=conn.cursor()
-    cur.execute("SELECT top 10 * FROM Customer_Sap where customercode='USH0000044'")
-    #cur.execute("SELECT * FROM Customer_Sap ")
+    #cur.execute("SELECT top 10 * FROM Customer_Sap where customercode='USH0000044'")
+    cur.execute("SELECT * FROM Customer_Sap ")
     for row in cur:
         result={
             "customercode":row["CustomerCode"],
@@ -75,8 +75,8 @@ def readdpelfromdatabase():
     cur=conn.cursor()
     cur.execute("SELECT * FROM DPELCustomers")
     for row in cur:
-        if not row["CustomerName"] or row["CustomerName"].strip()=="":
-            continue
+        #if not row["CustomerName"] or row["CustomerName"].strip()=="":
+        #    continue
         result={"companyName":row["CustomerName"] and row["CustomerName"].strip().replace("\"",'') or "","address":row["Address"] and row["Address"].strip().replace("\"",""),"language":row["Language"]}
         if row["Language"]==1:
             zh_rows.append(result)
